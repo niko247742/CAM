@@ -1,10 +1,13 @@
 using CAM.Data.DataModels;
+using CAM.Data.Services;
 using CAM.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace CAM.Controllers
 {
+    [Route("api/[controller]")]
     public class HomeController : Controller
     {
         private readonly CAMDataContext _context;
@@ -12,22 +15,18 @@ namespace CAM.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-        [Route("home/reports")]
+      
+
         public IActionResult Reports()
         {
             ViewData["Message"] = "Your reports page.";
 
             return View();
         }
-        [Route("api/candidates/")]
+        [HttpGet]
         public IActionResult GetCandidates()
         {
-            ViewData["Message"] = "Your candidates page.";
-
+  
             return View();
         }
         public IActionResult Questions()

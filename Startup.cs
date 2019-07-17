@@ -1,8 +1,11 @@
+using CAM.Data.DataModels;
+using CAM.Data.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,11 +26,15 @@ namespace CAM.Website
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddDbContext<CAMDataContext>(options => options.UseMySql(Configuration.GetConnectionString("Database")));
+
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+        /*    services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
-            });
+            });*/
+
+            services.AddScoped<ICandidateServices, CandidateServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,9 +51,9 @@ namespace CAM.Website
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
-
+        
+/*            app.UseSpaStaticFiles();
+*/
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -54,15 +61,22 @@ namespace CAM.Website
                     template: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            /*       app.UseSpa(spa =>
+                   {
+                       spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+                       if (env.IsDevelopment())
+                       {
+                           spa.UseReactDevelopmentServer(npmScript: "start");
+                       }
+                   });*/
+            app.UseCors(builder =>
+             builder.AllowAnyHeader()
+                     .AllowAnyMethod()
+                     .AllowAnyOrigin()
+                     .AllowCredentials());
+
+            app.UseStaticFiles();
         }
     }
 }

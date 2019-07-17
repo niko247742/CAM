@@ -38,8 +38,8 @@ class MockCandidatesApi {
   }
 }
 
-const CandidatesApi =
-  process.env.NODE_ENV === "production" || process.env.API_MODE === "server"
-    ? ServerCandidatesApi
-    : MockCandidatesApi;
+const CandidatesApi = ServerCandidatesApi;
+//process.env.NODE_ENV === "production" || process.env.API_MODE === "server"
+//  ? ServerCandidatesApi
+//  : MockCandidatesApi;
 export default CandidatesApi;
